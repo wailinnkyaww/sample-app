@@ -94,7 +94,8 @@ const styles = {
     color: "#fff",
     border: "none",
   },
-};
+} as const;
+
 
 export default function Home() {
   return (

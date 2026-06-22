@@ -1,25 +1,91 @@
 import React, { useState } from "react";
 import "./Register.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 const Register = () => {
   const [step, setStep] = useState<"selection" | "register">("selection");
   const [role, setRole] = useState<"Buyer" | "Farmer" | null>(null);
 
+  // Form states
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [phone, setPhone] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
+  const [successMsg, setSuccessMsg] = useState("");
+  const [regLoading, setRegLoading] = useState(false);
+
+  const { register } = useAuth();
+  const navigate = useNavigate();
+
   const handleRoleSelect = (selectedRole: "Buyer" | "Farmer") => {
     setRole(selectedRole);
     setStep("register");
-  };
-
-  const handleExit = () => {
-    setStep("selection");
-    setRole(null);
+    setErrorMsg("");
   };
 
   const handleRoleExit = () => {
     setStep("selection");
     setRole(null);
+    setErrorMsg("");
   };
+
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrorMsg("");
+    setSuccessMsg("");
+
+    if (!role) {
+      setErrorMsg("Please select a role first.");
+      return;
+    }
+
+    if (!fullName || !email || !password || !confirmPassword) {
+      setErrorMsg("All fields are required.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setErrorMsg("Passwords do not match.");
+      return;
+    }
+
+    if (password.length < 6) {
+      setErrorMsg("Password must be at least 6 characters.");
+      return;
+    }
+
+    setRegLoading(true);
+    try {
+      await register(email, password, fullName, role, phone);
+      setSuccessMsg("Registration successful! Redirecting...");
+      setTimeout(() => {
+        if (role === "Buyer") {
+          navigate("/admin/dashboard");
+        } else {
+          navigate("/user/dashboard");
+        }
+      }, 1500);
+    } catch (err: any) {
+      console.error(err);
+      let message = "Failed to register. Please try again.";
+      if (err.code === "auth/email-already-in-use") {
+        message = "This email is already registered.";
+      } else if (err.code === "auth/invalid-email") {
+        message = "Invalid email address format.";
+      } else if (err.response?.data?.message) {
+        message = err.response.data.message;
+      } else if (err.message) {
+        message = err.message;
+      }
+      setErrorMsg(message);
+    } finally {
+      setRegLoading(false);
+    }
+  };
+
   return (
     <div className="register-container">
       {step === "selection" && (
@@ -50,27 +116,65 @@ const Register = () => {
 
       {step === "register" && (
         <div className="register-card">
-          {/* <button onClick={handleExit} className="close-btn">
-            ×
-          </button> */}
-
           <h2>Register as {role}</h2>
 
-          <form className="register-form" onSubmit={(e) => e.preventDefault()}>
+          {errorMsg && <div style={{ color: "#ef4444", backgroundColor: "#fee2e2", padding: "10px", borderRadius: "6px", margin: "10px 0", fontSize: "14px", border: "1px solid #fca5a5" }}>{errorMsg}</div>}
+          {successMsg && <div style={{ color: "#16a34a", backgroundColor: "#dcfce7", padding: "10px", borderRadius: "6px", margin: "10px 0", fontSize: "14px", border: "1px solid #86efac" }}>{successMsg}</div>}
+
+          <form className="register-form" onSubmit={handleRegister}>
             <label htmlFor="fullname">
-              Full Name{role == "Buyer" && " ( Company Name )"}
+              {role === "Buyer" ? "Company / Full Name" : "Full Name"}
             </label>
-            <input type="text" placeholder="Full Name" />
+            <input
+              type="text"
+              placeholder="Full Name"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              disabled={regLoading}
+              required
+            />
+
             <label htmlFor="email">Email</label>
-            <input type="email" placeholder="Email" />
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              disabled={regLoading}
+              required
+            />
+
+            <label htmlFor="phone">Phone (Optional)</label>
+            <input
+              type="text"
+              placeholder="Phone number"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              disabled={regLoading}
+            />
+
             <label htmlFor="password">Password</label>
-            <input type="password" placeholder="Password" />
-            <label htmlFor="comfirm-password">Comfirm Password</label>
-            <input type="password" placeholder="Confirm Password" />
-            <input type="hidden" role="role" />
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              disabled={regLoading}
+              required
+            />
+
+            <label htmlFor="confirm-password">Confirm Password</label>
+            <input
+              type="password"
+              placeholder="Confirm Password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              disabled={regLoading}
+              required
+            />
 
             <label className="checkbox-group">
-              <input type="checkbox" required />
+              <input type="checkbox" required disabled={regLoading} />
               <span>I agree to the terms</span>
             </label>
 
@@ -79,20 +183,19 @@ const Register = () => {
                 type="button"
                 className="back-btn"
                 onClick={() => setStep("selection")}
+                disabled={regLoading}
               >
                 Back
               </button>
 
-              <button type="submit" className="register-btn">
-                Register
+              <button type="submit" className="register-btn" disabled={regLoading}>
+                {regLoading ? "Registering..." : "Register"}
               </button>
             </div>
           </form>
           <p className="register-text">
-            Do have an account?
-            <button className="register-link">
-              <Link to={"/login"}>Login</Link>
-            </button>
+            Already have an account?{" "}
+            <Link className="register-link" to="/login">Login</Link>
           </p>
         </div>
       )}
@@ -101,3 +204,4 @@ const Register = () => {
 };
 
 export default Register;
+

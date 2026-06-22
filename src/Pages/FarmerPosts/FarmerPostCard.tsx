@@ -1,6 +1,7 @@
 import { styles } from "./Styles";
 import { Link } from "react-router-dom";
 interface Post {
+  id: string | number;
   title: string;
   cropType: string;
   quantity: number;
@@ -10,6 +11,7 @@ interface Post {
   image: string;
   status: string;
 }
+
 
 export const FarmerPostCard = ({ post }: { post: Post }) => {
   return (

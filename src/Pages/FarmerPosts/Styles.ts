@@ -30,4 +30,5 @@ export const styles = {
     cursor: "pointer",
     width: "100%",
   },
-};
+} as const;
+

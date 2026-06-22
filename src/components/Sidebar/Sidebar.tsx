@@ -1,35 +1,237 @@
+// import { Link } from "react-router-dom";
+// import "./Sidebar.css";
+// import { useAuth } from "../../context/AuthContext";
+
+// function Sidebar() {
+//   const { user } = useAuth();
+
+//   return (
+//     <>
+//       <aside className="sidebar">
+//         {user ? (
+//           <ul>
+//             {user.role === "Buyer" && (
+//               <>
+//                 <li>
+//                   <Link className="link" to="/admin/dashboard">
+//                     Admin Dashboard
+//                   </Link>
+//                 </li>
+//                 <li>
+//                   <Link className="link" to="/AdminProfile">
+//                     Admin Profile
+//                   </Link>
+//                 </li>
+//               </>
+//             )}
+
+//             {user.role === "Farmer" && (
+//               <>
+//                 <li>
+//                   <Link className="link" to="/user/dashboard">
+//                     User Dashboard
+//                   </Link>
+//                 </li>
+//                 <li>
+//                   <Link className="link" to="/userProfile">
+//                     User Profile
+//                   </Link>
+//                 </li>
+//               </>
+//             )}
+//           </ul>
+//         ) : (
+//           <div style={{ padding: "20px", fontSize: "14px", color: "#666" }}>
+//             Please <Link to="/login" style={{ color: "#4f46e5", fontWeight: "bold" }}>login</Link> to access your dashboard.
+//           </div>
+//         )}
+//       </aside>
+//     </>
+//   );
+// }
+
+// export default Sidebar;
+
 import { Link } from "react-router-dom";
 import "./Sidebar.css";
+import { useAuth } from "../../context/AuthContext";
 
 function Sidebar() {
-  return (
-    <>
-      <aside className="sidebar">
-        <ul>
-          <li>
-            <Link className="link" to="/admin/dashboard">
-              Admin Dashboard
-            </Link>
-          </li>
-          <li>
-            <Link className="link" to="/AdminProfile">
-              Admin Profile
-            </Link>
-          </li>
+  const { user } = useAuth();
 
-          <li>
-            <Link className="link" to="/user/dashboard">
-              User Dashboard
-            </Link>
-          </li>
-          <li>
-            <Link className="link" to="/userProfile">
-              User Profile
-            </Link>
-          </li>
+  return (
+    <aside className="sidebar">
+      {user ? (
+        <ul className="sidebar-menu">
+          {/* ================= ADMIN ================= */}
+          {user.role === "Admin" && (
+            <>
+              <li>
+                <Link className="link" to="/admin/dashboard">
+                  Dashboard
+                </Link>
+              </li>
+
+              <li>
+                <Link className="link" to="/admin/profile">
+                  Profile
+                </Link>
+              </li>
+
+              <li>
+                <Link className="link" to="/admin/farmers">
+                  Manage Farmers
+                </Link>
+              </li>
+
+              <li>
+                <Link className="link" to="/admin/buyers">
+                  Manage Buyers
+                </Link>
+              </li>
+
+              <li>
+                <Link className="link" to="/admin/contracts">
+                  Contracts
+                </Link>
+              </li>
+
+              <li>
+                <Link className="link" to="/admin/harvests">
+                  Harvest Records
+                </Link>
+              </li>
+
+              <li>
+                <Link className="link" to="/admin/payments">
+                  Payments
+                </Link>
+              </li>
+
+              <li>
+                <Link className="link" to="/admin/reports">
+                  Reports
+                </Link>
+              </li>
+
+              <li>
+                <Link className="link" to="/admin/settings">
+                  Settings
+                </Link>
+              </li>
+            </>
+          )}
+
+          {/* ================= BUYER ================= */}
+          {user.role === "Buyer" && (
+            <>
+              <li>
+                <Link className="link" to="/buyer/dashboard">
+                  Dashboard
+                </Link>
+              </li>
+
+              <li>
+                <Link className="link" to="/buyer/profile">
+                  Profile
+                </Link>
+              </li>
+
+              <li>
+                <Link className="link" to="/buyer/contracts">
+                  Contract Requests
+                </Link>
+              </li>
+
+              <li>
+                <Link className="link" to="/buyer/farmers">
+                  Farmers
+                </Link>
+              </li>
+
+              <li>
+                <Link className="link" to="/buyer/purchases">
+                  Rice Purchases
+                </Link>
+              </li>
+
+              <li>
+                <Link className="link" to="/buyer/payments">
+                  Payments
+                </Link>
+              </li>
+
+              <li>
+                <Link className="link" to="/buyer/reports">
+                  Reports
+                </Link>
+              </li>
+
+              <li>
+                <Link className="link" to="/buyer/notifications">
+                  Notifications
+                </Link>
+              </li>
+            </>
+          )}
+
+          {/* ================= FARMER ================= */}
+          {user.role === "Farmer" && (
+            <>
+              <li>
+                <Link className="link" to="/farmer/dashboard">
+                  Dashboard
+                </Link>
+              </li>
+
+              <li>
+                <Link className="link" to="/farmer/profile">
+                  Profile
+                </Link>
+              </li>
+
+              <li>
+                <Link className="link" to="/farmer/contracts">
+                  My Contracts
+                </Link>
+              </li>
+
+              <li>
+                <Link className="link" to="/farmer/harvests">
+                  Harvest Records
+                </Link>
+              </li>
+
+              <li>
+                <Link className="link" to="/farmer/payments">
+                  Payments
+                </Link>
+              </li>
+
+              <li>
+                <Link className="link" to="/farmer/offers">
+                  Company Offers
+                </Link>
+              </li>
+
+              <li>
+                <Link className="link" to="/farmer/notifications">
+                  Notifications
+                </Link>
+              </li>
+            </>
+          )}
         </ul>
-      </aside>
-    </>
+      ) : (
+        <div className="sidebar-login-message">
+          Please{" "}
+          <Link className="login-link" to="/login">
+            login
+          </Link>{" "}
+          to access your dashboard.
+        </div>
+      )}
+    </aside>
   );
 }
 
