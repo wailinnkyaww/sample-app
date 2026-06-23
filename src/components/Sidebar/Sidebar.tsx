@@ -103,7 +103,7 @@ function Sidebar() {
               </li>
 
               <li>
-                <Link className="link" to="/admin/payments">
+                <Link className="link" to="/admin/payment">
                   Payments
                 </Link>
               </li>
@@ -156,7 +156,7 @@ function Sidebar() {
               </li>
 
               <li>
-                <Link className="link" to="/buyer/payments">
+                <Link className="link" to="/buyer/payment">
                   Payments
                 </Link>
               </li>
@@ -185,25 +185,19 @@ function Sidebar() {
               </li>
 
               <li>
-                <Link className="link" to="/farmer/profile">
-                  Profile
-                </Link>
-              </li>
-
-              <li>
-                <Link className="link" to="/farmer/contracts">
+                <Link className="link" to="/farmer/myContracts">
                   My Contracts
                 </Link>
               </li>
 
               <li>
-                <Link className="link" to="/farmer/harvests">
+                <Link className="link" to="/farmer/harvestRecords">
                   Harvest Records
                 </Link>
               </li>
 
               <li>
-                <Link className="link" to="/farmer/payments">
+                <Link className="link" to="/farmer/payment">
                   Payments
                 </Link>
               </li>

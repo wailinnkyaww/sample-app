@@ -1,4 +1,4 @@
-import FarmerPosts from "../FarmerPosts/FarmerPosts";
+import FarmerPosts from "./FarmerPosts";
 
 export default function AllPost() {
   return (
@@ -7,5 +7,3 @@ export default function AllPost() {
     </>
   );
 }
-
-

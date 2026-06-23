@@ -14,8 +14,12 @@ function Header() {
   return (
     <>
       <header className="header">
-        <div className="logo" style={{ cursor: "pointer" }} onClick={() => navigate("/")}>
-          My Application
+        <div
+          className="logo"
+          style={{ cursor: "pointer" }}
+          onClick={() => navigate("/")}
+        >
+          AgriMart
         </div>
         <nav className="nav">
           <ul className="nav-lists">
@@ -37,13 +41,27 @@ function Header() {
           </ul>
 
           {loading ? (
-            <span style={{ color: "#666", fontSize: "14px", marginRight: "10px" }}>Loading...</span>
+            <span
+              style={{ color: "#666", fontSize: "14px", marginRight: "10px" }}
+            >
+              Loading...
+            </span>
           ) : user ? (
-            <div className="user-nav-section" style={{ display: "flex", alignItems: "center", gap: "15px" }}>
-              <span className="user-greeting" style={{ fontSize: "14px", fontWeight: "500" }}>
+            <div
+              className="user-nav-section"
+              style={{ display: "flex", alignItems: "center", gap: "15px" }}
+            >
+              <span
+                className="user-greeting"
+                style={{ fontSize: "14px", fontWeight: "500" }}
+              >
                 Hello, <strong>{user.fullName}</strong> ({user.role})
               </span>
-              <button className="btn-login" onClick={handleLogout} style={{ backgroundColor: "#ef4444", border: "none" }}>
+              <button
+                className="btn-login"
+                onClick={handleLogout}
+                style={{ backgroundColor: "#ef4444", border: "none" }}
+              >
                 Logout
               </button>
             </div>
@@ -64,4 +82,3 @@ function Header() {
 }
 
 export default Header;
-
