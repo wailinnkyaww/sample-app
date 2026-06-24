@@ -1,0 +1,140 @@
+.payment-container {
+  padding: 25px;
+  background: #f5f7fa;
+  min-height: 100vh;
+}
+
+.payment-container h1 {
+  margin-bottom: 25px;
+  color: #2c3e50;
+}
+
+/* Stats */
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+.card h3 {
+  margin-bottom: 10px;
+  color: #666;
+}
+
+.card p {
+  font-size: 28px;
+  font-weight: bold;
+  color: #27ae60;
+}
+
+/* Sections */
+
+.section {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 25px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+.section h2 {
+  margin-bottom: 15px;
+  color: #2c3e50;
+}
+
+/* Table */
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.payment-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.payment-table th,
+.payment-table td {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+}
+
+.payment-table th {
+  background: #f8f9fa;
+}
+
+.payment-table tr:hover {
+  background: #fafafa;
+}
+
+/* Status */
+
+.status {
+  padding: 6px 12px;
+  border-radius: 20px;
+  color: white;
+  font-size: 13px;
+}
+
+.status.paid {
+  background: #27ae60;
+}
+
+.status.pending {
+  background: #f39c12;
+}
+
+/* Summary */
+
+.summary-box {
+  max-width: 500px;
+}
+
+.summary-box p {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+}
+
+.summary-box hr {
+  margin: 15px 0;
+}
+
+.total {
+  font-size: 18px;
+  font-weight: bold;
+  color: #e74c3c;
+}
+
+/* Smart Contract Status */
+
+.contract-status p {
+  margin: 10px 0;
+  padding: 12px;
+  background: #eefaf0;
+  border-left: 4px solid #27ae60;
+  border-radius: 5px;
+}
+
+/* Responsive */
+
+@media (max-width: 768px) {
+  .payment-container {
+    padding: 15px;
+  }
+
+  .stats {
+    grid-template-columns: 1fr;
+  }
+}

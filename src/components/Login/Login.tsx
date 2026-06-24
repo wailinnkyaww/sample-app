@@ -29,15 +29,18 @@ const Login = () => {
       setSuccessMsg("Logged in successfully! Redirecting...");
       setTimeout(() => {
         if (userProfile.role === "Buyer") {
-          navigate("/admin/dashboard");
-        } else {
-          navigate("/user/dashboard");
+          navigate("/buyer/dashboard");
+        } else if (userProfile.role === "Farmer") {
+          navigate("/farmer/dashboard");
         }
-      }, 1500);
+      }, 1000);
     } catch (err: any) {
       console.error(err);
       let message = "Invalid email or password.";
-      if (err.code === "auth/user-not-found" || err.code === "auth/wrong-password") {
+      if (
+        err.code === "auth/user-not-found" ||
+        err.code === "auth/wrong-password"
+      ) {
         message = "Incorrect email or password.";
       } else if (err.code === "auth/invalid-credential") {
         message = "Invalid login credentials.";
@@ -56,8 +59,36 @@ const Login = () => {
     <div className="login-card">
       <h2 className="login-title">Login</h2>
 
-      {errorMsg && <div style={{ color: "#ef4444", backgroundColor: "#fee2e2", padding: "10px", borderRadius: "6px", margin: "10px 0", fontSize: "14px", border: "1px solid #fca5a5" }}>{errorMsg}</div>}
-      {successMsg && <div style={{ color: "#16a34a", backgroundColor: "#dcfce7", padding: "10px", borderRadius: "6px", margin: "10px 0", fontSize: "14px", border: "1px solid #86efac" }}>{successMsg}</div>}
+      {errorMsg && (
+        <div
+          style={{
+            color: "#ef4444",
+            backgroundColor: "#fee2e2",
+            padding: "10px",
+            borderRadius: "6px",
+            margin: "10px 0",
+            fontSize: "14px",
+            border: "1px solid #fca5a5",
+          }}
+        >
+          {errorMsg}
+        </div>
+      )}
+      {successMsg && (
+        <div
+          style={{
+            color: "#16a34a",
+            backgroundColor: "#dcfce7",
+            padding: "10px",
+            borderRadius: "6px",
+            margin: "10px 0",
+            fontSize: "14px",
+            border: "1px solid #86efac",
+          }}
+        >
+          {successMsg}
+        </div>
+      )}
 
       <form className="login-form" onSubmit={handleLogin}>
         <div className="form-group">
@@ -89,11 +120,12 @@ const Login = () => {
 
       <p className="register-text">
         Don't have an account?{" "}
-        <Link className="register-link" to="/register">Register</Link>
+        <Link className="register-link" to="/register">
+          Register
+        </Link>
       </p>
     </div>
   );
 };
 
 export default Login;
-

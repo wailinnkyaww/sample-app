@@ -1,4 +1,5 @@
 import React from "react";
+import "./Dashboard.css";
 
 const Dashboard = () => {
   const stats = [
@@ -45,91 +46,118 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="container mt-4">
-      <h2 className="mb-4">Buyer Dashboard</h2>
+    <div className="container-fluid dashboard-container">
+      <h2 className="dashboard-title">Buyer Dashboard</h2>
 
       {/* Statistics */}
-      <div className="row">
+      <div className="stats-container">
         {stats.map((stat, index) => (
-          <div className="col-md-3 mb-3" key={index}>
-            <div className="card shadow-sm">
-              <div className="card-body text-center">
-                <h5>{stat.title}</h5>
-                <h3>{stat.value}</h3>
-              </div>
+          <div className="stat-card" key={index}>
+            <div className="stat-card-body">
+              <h5>{stat.title}</h5>
+              <h3>{stat.value}</h3>
             </div>
           </div>
         ))}
       </div>
 
       {/* Recent Contracts */}
-      <div className="card mb-4">
+      <div className="card dashboard-card">
         <div className="card-header">
           <h5>Recent Contracts</h5>
         </div>
+
         <div className="card-body">
-          <table className="table">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Farmer</th>
-                <th>Rice Type</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {recentContracts.map((contract) => (
-                <tr key={contract.id}>
-                  <td>{contract.id}</td>
-                  <td>{contract.farmer}</td>
-                  <td>{contract.riceType}</td>
-                  <td>{contract.status}</td>
+          <div className="table-responsive">
+            <table className="table dashboard-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Farmer</th>
+                  <th>Rice Type</th>
+                  <th>Status</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+
+              <tbody>
+                {recentContracts.map((contract) => (
+                  <tr key={contract.id}>
+                    <td>{contract.id}</td>
+                    <td>{contract.farmer}</td>
+                    <td>{contract.riceType}</td>
+                    <td>
+                      <span
+                        className={`status ${
+                          contract.status === "Pending"
+                            ? "status-pending"
+                            : "status-accepted"
+                        }`}
+                      >
+                        {contract.status}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
 
       {/* Recent Purchases */}
-      <div className="card mb-4">
+      <div className="card dashboard-card">
         <div className="card-header">
           <h5>Recent Purchases</h5>
         </div>
+
         <div className="card-body">
-          <table className="table">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Rice</th>
-                <th>Quantity</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {recentPurchases.map((purchase) => (
-                <tr key={purchase.id}>
-                  <td>{purchase.id}</td>
-                  <td>{purchase.rice}</td>
-                  <td>{purchase.quantity}</td>
-                  <td>{purchase.status}</td>
+          <div className="table-responsive">
+            <table className="table dashboard-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Rice</th>
+                  <th>Quantity</th>
+                  <th>Status</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+
+              <tbody>
+                {recentPurchases.map((purchase) => (
+                  <tr key={purchase.id}>
+                    <td>{purchase.id}</td>
+                    <td>{purchase.rice}</td>
+                    <td>{purchase.quantity}</td>
+                    <td>
+                      <span
+                        className={`status ${
+                          purchase.status === "Delivered"
+                            ? "status-delivered"
+                            : "status-processing"
+                        }`}
+                      >
+                        {purchase.status}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
 
       {/* Notifications */}
-      <div className="card">
+      <div className="card dashboard-card">
         <div className="card-header">
           <h5>Notifications</h5>
         </div>
+
         <div className="card-body">
-          <ul className="list-group">
+          <ul className="notification-list">
             {notifications.map((notification, index) => (
-              <li key={index} className="list-group-item">
-                {notification}
+              <li key={index} className="notification-item">
+                🔔 {notification}
               </li>
             ))}
           </ul>

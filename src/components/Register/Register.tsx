@@ -60,14 +60,15 @@ const Register = () => {
     setRegLoading(true);
     try {
       await register(email, password, fullName, role, phone);
+      console.log(role);
       setSuccessMsg("Registration successful! Redirecting...");
       setTimeout(() => {
         if (role === "Buyer") {
-          navigate("/admin/dashboard");
+          navigate("/buyer/dashboard");
         } else {
-          navigate("/user/dashboard");
+          navigate("/farmer/dashboard");
         }
-      }, 1500);
+      }, 1000);
     } catch (err: any) {
       console.error(err);
       let message = "Failed to register. Please try again.";
@@ -118,8 +119,36 @@ const Register = () => {
         <div className="register-card">
           <h2>Register as {role}</h2>
 
-          {errorMsg && <div style={{ color: "#ef4444", backgroundColor: "#fee2e2", padding: "10px", borderRadius: "6px", margin: "10px 0", fontSize: "14px", border: "1px solid #fca5a5" }}>{errorMsg}</div>}
-          {successMsg && <div style={{ color: "#16a34a", backgroundColor: "#dcfce7", padding: "10px", borderRadius: "6px", margin: "10px 0", fontSize: "14px", border: "1px solid #86efac" }}>{successMsg}</div>}
+          {errorMsg && (
+            <div
+              style={{
+                color: "#ef4444",
+                backgroundColor: "#fee2e2",
+                padding: "10px",
+                borderRadius: "6px",
+                margin: "10px 0",
+                fontSize: "14px",
+                border: "1px solid #fca5a5",
+              }}
+            >
+              {errorMsg}
+            </div>
+          )}
+          {successMsg && (
+            <div
+              style={{
+                color: "#16a34a",
+                backgroundColor: "#dcfce7",
+                padding: "10px",
+                borderRadius: "6px",
+                margin: "10px 0",
+                fontSize: "14px",
+                border: "1px solid #86efac",
+              }}
+            >
+              {successMsg}
+            </div>
+          )}
 
           <form className="register-form" onSubmit={handleRegister}>
             <label htmlFor="fullname">
@@ -188,14 +217,20 @@ const Register = () => {
                 Back
               </button>
 
-              <button type="submit" className="register-btn" disabled={regLoading}>
+              <button
+                type="submit"
+                className="register-btn"
+                disabled={regLoading}
+              >
                 {regLoading ? "Registering..." : "Register"}
               </button>
             </div>
           </form>
           <p className="register-text">
             Already have an account?{" "}
-            <Link className="register-link" to="/login">Login</Link>
+            <Link className="register-link" to="/login">
+              Login
+            </Link>
           </p>
         </div>
       )}
@@ -204,4 +239,3 @@ const Register = () => {
 };
 
 export default Register;
-

@@ -26,6 +26,7 @@ import BuyerPayment from "../Pages/Buyer/Payment/Payment";
 import BuyerProfile from "../Pages/Buyer/Profile/Profile";
 import Reports from "../Pages/Buyer/Reports/Reports";
 import RicePurchases from "../Pages/Buyer/RicePurchases/RicePurchases";
+import CreateContract from "../Pages/Buyer/CreateContract/CreateContract";
 
 export const AppRoutes = () => (
   <Routes>
@@ -52,6 +53,7 @@ export const AppRoutes = () => (
 
     {/* buyer route */}
     <Route path="/buyer/contracts" element={<ContractRequest />} />
+    <Route path="/buyer/create-contract" element={<CreateContract />} />
     <Route path="/buyer/dashboard" element={<BuyerDashboard />} />
     <Route path="/buyer/farmers" element={<Farmers />} />
     <Route path="/buyer/notifications" element={<AdminNotifications />} />

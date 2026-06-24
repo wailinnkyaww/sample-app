@@ -1,22 +1,217 @@
 import { useState } from "react";
+import "./HarvestRecords.css";
 
 const HarvestRecords = () => {
-  const [quantity, setQuantity] = useState("");
+  const [report, setReport] = useState({
+    contractId: "",
+    reportType: "Weekly",
+    quantity: "",
+    condition: "",
+    notes: "",
+  });
+
+  const contracts = [
+    {
+      id: "C001",
+      buyer: "ABC Rice Company",
+      crop: "Rice",
+    },
+    {
+      id: "C002",
+      buyer: "Green Agro Ltd",
+      crop: "Corn",
+    },
+    {
+      id: "C003",
+      buyer: "Fresh Market",
+      crop: "Tomato",
+    },
+  ];
+
+  const reports = [
+    {
+      id: 1,
+      contract: "C001",
+      type: "Weekly",
+      quantity: "250kg",
+      date: "20 Jun 2026",
+      status: "Submitted",
+    },
+    {
+      id: 2,
+      contract: "C002",
+      type: "Monthly",
+      quantity: "1200kg",
+      date: "01 Jun 2026",
+      status: "Approved",
+    },
+  ];
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(report);
+    alert("Harvest Report Submitted");
+  };
 
   return (
-    <div>
-      <h1>Harvest Records</h1>
+    <div className="harvest-container">
+      <h1>Harvest Reports</h1>
 
-      <form>
-        <input
-          type="text"
-          placeholder="Rice Quantity"
-          value={quantity}
-          onChange={(e) => setQuantity(e.target.value)}
-        />
+      {/* Summary Cards */}
+      <div className="stats">
+        <div className="card">
+          <h3>Total Reports</h3>
+          <p>15</p>
+        </div>
 
-        <button>Add Harvest</button>
-      </form>
+        <div className="card">
+          <h3>Weekly Reports</h3>
+          <p>10</p>
+        </div>
+
+        <div className="card">
+          <h3>Monthly Reports</h3>
+          <p>5</p>
+        </div>
+
+        <div className="card">
+          <h3>Total Harvest</h3>
+          <p>4,500kg</p>
+        </div>
+      </div>
+
+      {/* Form */}
+      <div className="form-section">
+        <h2>Submit Harvest Report</h2>
+
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label>Contract</label>
+
+            <select
+              value={report.contractId}
+              onChange={(e) =>
+                setReport({
+                  ...report,
+                  contractId: e.target.value,
+                })
+              }
+            >
+              <option value="">Select Contract</option>
+
+              {contracts.map((contract) => (
+                <option key={contract.id} value={contract.id}>
+                  {contract.id} - {contract.crop}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="form-group">
+            <label>Report Type</label>
+
+            <select
+              value={report.reportType}
+              onChange={(e) =>
+                setReport({
+                  ...report,
+                  reportType: e.target.value,
+                })
+              }
+            >
+              <option>Weekly</option>
+              <option>Monthly</option>
+            </select>
+          </div>
+
+          <div className="form-group">
+            <label>Harvest Quantity (kg)</label>
+
+            <input
+              type="number"
+              placeholder="Enter quantity"
+              value={report.quantity}
+              onChange={(e) =>
+                setReport({
+                  ...report,
+                  quantity: e.target.value,
+                })
+              }
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Crop Condition</label>
+
+            <select
+              value={report.condition}
+              onChange={(e) =>
+                setReport({
+                  ...report,
+                  condition: e.target.value,
+                })
+              }
+            >
+              <option value="">Select</option>
+              <option>Excellent</option>
+              <option>Good</option>
+              <option>Average</option>
+              <option>Poor</option>
+            </select>
+          </div>
+
+          <div className="form-group">
+            <label>Notes</label>
+
+            <textarea
+              rows="4"
+              placeholder="Additional comments..."
+              value={report.notes}
+              onChange={(e) =>
+                setReport({
+                  ...report,
+                  notes: e.target.value,
+                })
+              }
+            />
+          </div>
+
+          <button className="submit-btn">Submit Report</button>
+        </form>
+      </div>
+
+      {/* Report History */}
+      <div className="table-section">
+        <h2>Report History</h2>
+
+        <table className="report-table">
+          <thead>
+            <tr>
+              <th>Contract</th>
+              <th>Type</th>
+              <th>Quantity</th>
+              <th>Date</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {reports.map((item) => (
+              <tr key={item.id}>
+                <td>{item.contract}</td>
+                <td>{item.type}</td>
+                <td>{item.quantity}</td>
+                <td>{item.date}</td>
+                <td>
+                  <span className={`status ${item.status.toLowerCase()}`}>
+                    {item.status}
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

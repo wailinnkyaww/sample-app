@@ -132,6 +132,12 @@ function Sidebar() {
               </li>
 
               <li>
+                <Link className="link" to="/buyer/create-contract">
+                  Create Contract
+                </Link>
+              </li>
+
+              <li>
                 <Link className="link" to="/buyer/profile">
                   Profile
                 </Link>
