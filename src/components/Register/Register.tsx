@@ -60,7 +60,6 @@ const Register = () => {
     setRegLoading(true);
     try {
       await register(email, password, fullName, role, phone);
-      console.log(role);
       setSuccessMsg("Registration successful! Redirecting...");
       setTimeout(() => {
         if (role === "Buyer") {
