@@ -38,7 +38,7 @@ export const AppRoutes = () => (
     <Route path="/allPost" element={<AllPost />} />
     <Route path="/farmerPost" element={<FarmerPosts />} />
     <Route path="/farmerPostDetails/:id" element={<PostDetail />} />
-    <Route path="/contracts" element={<CreateContracts />} /> //create contracts
+    <Route path="/contracts" element={<Contracts />} /> //create contracts
     {/* <Route path="/contracts" element={<CreateContract />} /   //all contracts */}
     <Route path="/admin/dashboard" element={<AdminDashboard />} />
     <Route path="/adminProfile" element={<AdminProfile />} />

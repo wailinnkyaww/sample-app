@@ -1,0 +1,83 @@
+.create-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, .5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.create-modal {
+  width: 700px;
+  max-width: 95%;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+}
+
+.create-modal h2 {
+  margin-bottom: 20px;
+  color: #198754;
+}
+
+.create-modal input,
+.create-modal select,
+.create-modal textarea {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 15px;
+  box-sizing: border-box;
+}
+
+.requirement-section {
+  margin-top: 20px;
+}
+
+.requirement-section label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.requirement-section input {
+  width: auto;
+  margin-right: 8px;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+.cancel-btn {
+  background: #6c757d;
+  color: white;
+  border: none;
+  padding: 12px 22px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.create-btn {
+  background: #198754;
+  color: white;
+  border: none;
+  padding: 12px 22px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.create-btn:hover {
+  background: #157347;
+}
+
+.cancel-btn:hover {
+  background: #5a6268;
+}

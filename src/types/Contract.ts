@@ -1,14 +1,8 @@
-import { User, UserRole } from "./User";
+import type { User, UserRole } from "./User";
 
 export type ContractType = "SELL" | "BUY";
 
-export type ContractStatus =
-  | "Open"
-  | "Pending"
-  | "Accepted"
-  | "Rejected"
-  | "Completed"
-  | "Cancelled";
+export type ContractStatus = "Open" | "Pending" | "Closed";
 
 export type PaymentMethod = "Cash" | "Bank Transfer" | "KBZ Pay" | "Wave Money";
 
@@ -22,43 +16,31 @@ export interface Applicant {
 }
 
 export interface Contract {
-  id?: string;
+  id: string;
 
   title: string;
-
-  contractType: ContractType;
-
   crop: string;
+  variety: string;
 
-  quantity: number;
-
-  price: number;
+  farmer: string;
+  farmerId: string;
 
   location: string;
 
-  description: string;
+  quantity: number;
+  unit: string;
 
-  requirements: string;
-
-  paymentMethod: PaymentMethod;
-
-  startDate: string;
-
-  endDate: string;
+  price: number;
 
   deliveryDate: string;
 
-  creator: User;
+  image: string;
 
-  applicants: Applicant[];
+  description: string;
 
-  selectedApplicant: Applicant | null;
-
-  agreementId: string | null;
+  requirements: string[];
 
   status: ContractStatus;
 
   createdAt: string;
-
-  updatedAt: string;
 }
