@@ -5,6 +5,7 @@ import ContractCard from "./ContractCard/ContractCard";
 import ContractFilter from "./ContractFilter/ContractFilter";
 import ContractDetails from "./ContractDetails/ContractDetails";
 import CreateContractModal from "./CreateContractModal/CreateContractModal";
+import { getContracts } from "../../services/contractService";
 import type { Contract } from "../../types/Contract";
 
 interface Contract {
@@ -40,84 +41,16 @@ const Contracts = () => {
   };
 
   useEffect(() => {
-    // Fake data (replace with Firebase later)
-    setContracts([
-      {
-        id: "1",
-        title: "Premium Rice Contract",
-        crop: "Rice",
-        variety: "Paw San Hmwe",
-        farmer: "Ko Aung",
-        farmerId: "farmer001",
-        location: "Yangon",
-        quantity: 5000,
-        unit: "Kg",
-        price: 0.55,
-        deliveryDate: "2026-08-10",
-        image:
-          "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=800",
-        description: "Premium export quality rice.",
-        requirements: ["Organic", "Quality Inspection"],
-        status: "Open",
-        createdAt: new Date().toISOString(),
-      },
-      {
-        id: "2",
-        title: "Corn Supply Contract",
-        crop: "Corn",
-        farmer: "Mg Tun",
-        location: "Mandalay",
-        quantity: 3000,
-        unit: "Kg",
-        price: 0.42,
-        deliveryDate: "2026-09-15",
-        image:
-          "https://images.unsplash.com/photo-1601597111158-2fceff292cdc?w=800",
-        status: "Open",
-      },
-      {
-        id: "3",
-        title: "Fresh Tomato Contract",
-        crop: "Tomato",
-        farmer: "Ma Su",
-        location: "Bago",
-        quantity: 1500,
-        unit: "Kg",
-        price: 0.75,
-        deliveryDate: "2026-07-30",
-        image:
-          "https://images.unsplash.com/photo-1546094096-0df4bcaaa337?w=800",
-        status: "Pending",
-      },
-      {
-        id: "4",
-        title: "Potato Harvest Contract",
-        crop: "Potato",
-        farmer: "Ko Zaw",
-        location: "Shan State",
-        quantity: 6000,
-        unit: "Kg",
-        price: 0.48,
-        deliveryDate: "2026-10-05",
-        image:
-          "https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=800",
-        status: "Closed",
-      },
-      {
-        id: "5",
-        title: "Bean Export Contract",
-        crop: "Beans",
-        farmer: "Daw Mya",
-        location: "Magway",
-        quantity: 4500,
-        unit: "Kg",
-        price: 0.67,
-        deliveryDate: "2026-09-20",
-        image:
-          "https://images.unsplash.com/photo-1515543237350-b3eea1ec8082?w=800",
-        status: "Open",
-      },
-    ]);
+    const fetchContracts = async () => {
+      try {
+        const data = await getContracts();
+        setContracts(data);
+      } catch (error) {
+        console.error("Error fetching contracts:", error);
+      }
+    };
+
+    fetchContracts();
   }, []);
 
   const handleApply = (id: string) => {
@@ -136,8 +69,7 @@ const Contracts = () => {
   const filteredContracts = contracts.filter((contract) => {
     const matchSearch =
       search === "" ||
-      contract.title.toLowerCase().includes(search.toLowerCase()) ||
-      contract.farmer.toLowerCase().includes(search.toLowerCase());
+      contract.title.toLowerCase().includes(search.toLowerCase());
 
     const matchCrop = crop === "" || contract.crop === crop;
 
@@ -149,7 +81,6 @@ const Contracts = () => {
 
     return matchSearch && matchCrop && matchStatus && matchLocation;
   });
-
   return (
     <div className="contracts-page">
       <div className="contracts-header">

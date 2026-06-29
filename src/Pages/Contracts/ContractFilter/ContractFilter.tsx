@@ -38,6 +38,7 @@ const ContractFilter = ({
         <option value="Tomato">Tomato</option>
         <option value="Beans">Beans</option>
         <option value="Potato">Potato</option>
+        <option value="Onion">Onion</option>
       </select>
 
       <select value={status} onChange={(e) => onStatusChange(e.target.value)}>

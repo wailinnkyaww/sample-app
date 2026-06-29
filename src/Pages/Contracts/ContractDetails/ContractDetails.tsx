@@ -1,20 +1,5 @@
 import "./ContractDetails.css";
-
-interface Contract {
-  id: string;
-  title: string;
-  crop: string;
-  farmer: string;
-  location: string;
-  quantity: number;
-  unit: string;
-  price: number;
-  deliveryDate: string;
-  image: string;
-  status: string;
-  description?: string;
-  requirements?: string[];
-}
+import type { Contract } from "../../../types/Contract";
 
 interface Props {
   contract: Contract | null;
@@ -26,14 +11,17 @@ const ContractDetails = ({ contract, onClose, onApply }: Props) => {
   if (!contract) return null;
 
   return (
-    <div className="modal-overlay">
+    <div className="contract-modal-overlay">
       <div className="contract-modal">
         <button className="close-btn" onClick={onClose}>
           ✕
         </button>
 
         <img
-          src={contract.image}
+          src={
+            contract.image ||
+            "https://placehold.co/900x350?text=Agricultural+Contract"
+          }
           alt={contract.crop}
           className="contract-banner"
         />
@@ -42,13 +30,13 @@ const ContractDetails = ({ contract, onClose, onApply }: Props) => {
 
         <div className="details-grid">
           <div>
-            <strong>Farmer</strong>
-            <p>{contract.farmer}</p>
+            <strong>Crop</strong>
+            <p>{contract.crop}</p>
           </div>
 
           <div>
-            <strong>Crop</strong>
-            <p>{contract.crop}</p>
+            <strong>Contract Type</strong>
+            <p>{contract.contractType}</p>
           </div>
 
           <div>
@@ -58,9 +46,7 @@ const ContractDetails = ({ contract, onClose, onApply }: Props) => {
 
           <div>
             <strong>Quantity</strong>
-            <p>
-              {contract.quantity} {contract.unit}
-            </p>
+            <p>{contract.quantity} Kg</p>
           </div>
 
           <div>
@@ -69,45 +55,62 @@ const ContractDetails = ({ contract, onClose, onApply }: Props) => {
           </div>
 
           <div>
-            <strong>Delivery</strong>
+            <strong>Payment Method</strong>
+            <p>{contract.paymentMethod}</p>
+          </div>
+
+          <div>
+            <strong>Start Date</strong>
+            <p>{contract.startDate}</p>
+          </div>
+
+          <div>
+            <strong>Delivery Date</strong>
             <p>{contract.deliveryDate}</p>
+          </div>
+
+          <div>
+            <strong>End Date</strong>
+            <p>{contract.endDate}</p>
           </div>
 
           <div>
             <strong>Status</strong>
             <p>{contract.status}</p>
           </div>
+
+          <div>
+            <strong>Applicants</strong>
+            <p>{contract.applicants?.length || 0}</p>
+          </div>
+
+          <div>
+            <strong>Agreement</strong>
+            <p>{contract.agreementId ?? "Not Created"}</p>
+          </div>
         </div>
 
         <div className="section">
           <h3>Description</h3>
 
-          <p>
-            {contract.description ??
-              "High-quality agricultural products are required for this contract. The buyer expects timely delivery and premium quality."}
-          </p>
+          <p>{contract.description || "No description provided."}</p>
         </div>
 
         <div className="section">
           <h3>Requirements</h3>
 
-          <ul>
-            {(
-              contract.requirements ?? [
-                "Minimum order 1000 Kg",
-                "Fresh harvest only",
-                "Quality inspection before delivery",
-              ]
-            ).map((item, index) => (
-              <li key={index}>{item}</li>
-            ))}
-          </ul>
+          <p>{contract.requirements || "No requirements specified."}</p>
         </div>
 
         <div className="modal-actions">
-          <button className="apply-button" onClick={() => onApply(contract.id)}>
-            Apply Contract
-          </button>
+          {contract.status === "Open" && (
+            <button
+              className="apply-button"
+              onClick={() => onApply(contract.id)}
+            >
+              Apply Contract
+            </button>
+          )}
 
           <button className="cancel-button" onClick={onClose}>
             Close

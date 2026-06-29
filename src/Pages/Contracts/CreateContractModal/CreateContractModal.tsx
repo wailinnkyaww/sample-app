@@ -1,26 +1,31 @@
 import { useState } from "react";
-import type { Contract } from "../../../types/Contract";
+import { addDoc, collection } from "firebase/firestore";
+import { db } from "../../../config/firebase";
+import { useAuth } from "../../../context/AuthContext";
 import "./CreateContractModal.css";
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
-  onCreate: (contract: Contract) => void;
 }
 
-const CreateContractModal = ({ isOpen, onClose, onCreate }: Props) => {
+const CreateContractModal = ({ isOpen, onClose }: Props) => {
+  const { user } = useAuth();
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
+    contractType: "",
     crop: "",
-    variety: "",
-    location: "",
     quantity: "",
-    unit: "Kg",
     price: "",
+    location: "",
+    startDate: "",
+    endDate: "",
     deliveryDate: "",
-    image: "",
     description: "",
-    requirements: [] as string[],
+    requirements: "",
+    paymentMethod: "Cash",
+    image: "",
   });
 
   if (!isOpen) return null;
@@ -30,143 +35,226 @@ const CreateContractModal = ({ isOpen, onClose, onCreate }: Props) => {
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >,
   ) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleRequirement = (value: string) => {
-    if (formData.requirements.includes(value)) {
-      setFormData({
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      await addDoc(collection(db, "contracts"), {
         ...formData,
-        requirements: formData.requirements.filter((r) => r !== value),
+        quantity: Number(formData.quantity),
+        price: Number(formData.price),
+        creator: {
+          uid: user!.uid,
+          fullName: user!.fullName,
+          email: user!.email,
+          role: user!.role,
+        },
+        applicants: [],
+        selectedApplicant: null,
+        agreementId: null,
+        status: "Open",
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       });
-    } else {
-      setFormData({
-        ...formData,
-        requirements: [...formData.requirements, value],
-      });
+
+      alert("Contract Created Successfully!");
+      onClose(); // Close modal on success
+    } catch (err) {
+      console.error(err);
+      alert("Something went wrong.");
+    } finally {
+      setLoading(false);
     }
-  };
-
-  const handleSubmit = () => {
-    const contract: Contract = {
-      id: Date.now().toString(),
-
-      title: formData.title,
-      crop: formData.crop,
-      variety: formData.variety,
-
-      farmer: "Current Farmer",
-      farmerId: "farmer001",
-
-      location: formData.location,
-
-      quantity: Number(formData.quantity),
-      unit: formData.unit,
-
-      price: Number(formData.price),
-
-      deliveryDate: formData.deliveryDate,
-
-      image:
-        formData.image || "https://via.placeholder.com/600x350?text=Crop+Image",
-
-      description: formData.description,
-
-      requirements: formData.requirements,
-
-      status: "Open",
-
-      createdAt: new Date().toISOString(),
-    };
-
-    onCreate(contract);
-
-    onClose();
   };
 
   return (
     <div className="create-modal-overlay">
       <div className="create-modal">
-        <h2>Create Contract</h2>
+        <h2>Create New Contract</h2>
+        <form onSubmit={handleSubmit}>
+          {/* Reuse your existing form inputs here */}
+          <div className="form-group">
+            <label>Contract Title</label>
+            <input
+              name="title"
+              value={formData.title}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-        <input
-          name="title"
-          placeholder="Contract Title"
-          onChange={handleChange}
-        />
+          {/* ... Add the rest of your form fields ... */}
 
-        <select name="crop" onChange={handleChange}>
-          <option value="">Select Crop</option>
-          <option>Rice</option>
-          <option>Corn</option>
-          <option>Beans</option>
-          <option>Potato</option>
-          <option>Tomato</option>
-        </select>
+          <div className="row">
+            <div className="form-group">
+              <label>Contract Type</label>
 
-        <input name="variety" placeholder="Variety" onChange={handleChange} />
+              <select
+                name="contractType"
+                value={formData.contractType}
+                onChange={handleChange}
+                required
+              >
+                <option value="">Select</option>
+                <option value="SELL">Sell Crops</option>
+                <option value="BUY">Buy Crops</option>
+              </select>
+            </div>
 
-        <input name="location" placeholder="Location" onChange={handleChange} />
+            <div className="form-group">
+              <label>Crop</label>
 
-        <input
-          type="number"
-          name="quantity"
-          placeholder="Quantity"
-          onChange={handleChange}
-        />
+              <select
+                name="crop"
+                value={formData.crop}
+                onChange={handleChange}
+                required
+              >
+                <option value="">Select Crop</option>
+                <option>Rice</option>
+                <option>Corn</option>
+                <option>Beans</option>
+                <option>Potato</option>
+                <option>Groundnut</option>
+                <option>Tomato</option>
+                <option>Onion</option>
+              </select>
+            </div>
+          </div>
 
-        <select name="unit" onChange={handleChange}>
-          <option>Kg</option>
-          <option>Ton</option>
-          <option>Bag</option>
-        </select>
+          <div className="row">
+            <div className="form-group">
+              <label>Quantity (KG)</label>
 
-        <input
-          type="number"
-          name="price"
-          placeholder="Price Per Kg"
-          onChange={handleChange}
-        />
+              <input
+                type="number"
+                name="quantity"
+                value={formData.quantity}
+                onChange={handleChange}
+                required
+              />
+            </div>
 
-        <input type="date" name="deliveryDate" onChange={handleChange} />
+            <div className="form-group">
+              <label>Price / KG</label>
 
-        <input name="image" placeholder="Image URL" onChange={handleChange} />
+              <input
+                type="number"
+                name="price"
+                value={formData.price}
+                onChange={handleChange}
+                required
+              />
+            </div>
+          </div>
 
-        <textarea
-          name="description"
-          rows={4}
-          placeholder="Description"
-          onChange={handleChange}
-        />
+          <div className="form-group">
+            <label>Location</label>
 
-        <div className="requirement-section">
-          <h4>Requirements</h4>
+            <input
+              type="text"
+              name="location"
+              value={formData.location}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-          {[
-            "Organic",
-            "Fresh Harvest",
-            "Export Quality",
-            "Quality Inspection",
-          ].map((item) => (
-            <label key={item}>
-              <input type="checkbox" onChange={() => handleRequirement(item)} />
-              {item}
-            </label>
-          ))}
-        </div>
+          <div className="form-group">
+            <label>Image URL</label>
+            <input
+              type="text"
+              name="image"
+              value={formData.image}
+              placeholder="https://example.com/image.jpg"
+              onChange={handleChange}
+            />
+          </div>
+          <div className="row">
+            <div className="form-group">
+              <label>Start Date</label>
 
-        <div className="modal-buttons">
-          <button className="cancel-btn" onClick={onClose}>
-            Cancel
-          </button>
+              <input
+                type="date"
+                name="startDate"
+                value={formData.startDate}
+                onChange={handleChange}
+              />
+            </div>
 
-          <button className="create-btn" onClick={handleSubmit}>
-            Create Contract
-          </button>
-        </div>
+            <div className="form-group">
+              <label>End Date</label>
+
+              <input
+                type="date"
+                name="endDate"
+                value={formData.endDate}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Delivery Date</label>
+
+              <input
+                type="date"
+                name="deliveryDate"
+                value={formData.deliveryDate}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label>Description</label>
+
+            <textarea
+              rows={4}
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Requirements</label>
+
+            <textarea
+              rows={4}
+              name="requirements"
+              value={formData.requirements}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Payment Method</label>
+
+            <select
+              name="paymentMethod"
+              value={formData.paymentMethod}
+              onChange={handleChange}
+            >
+              <option>Cash</option>
+              <option>Bank Transfer</option>
+              <option>KBZ Pay</option>
+              <option>Wave Money</option>
+            </select>
+          </div>
+
+          <div className="modal-buttons">
+            <button type="button" className="cancel-btn" onClick={onClose}>
+              Cancel
+            </button>
+            <button type="submit" className="create-btn" disabled={loading}>
+              {loading ? "Creating..." : "Create Contract"}
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );
